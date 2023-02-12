@@ -17,69 +17,81 @@ tickers = []
 maliyet=[]
 kazanç=[]
 ana_para=10000
+start = ['2018-11-20']
+end = ['2018-12-20']
 
-def random_fibonaci():
+n=0
+for i in range(30):
+    def random_fibonaci():
 
-    for i in range(3):
+        for i in range(3):
 
-        new=random.sample(hisseKodları,348)
-        fibon=[0,1,2,3,5,8,13,21,34,55,89,144,233]
-        for i in range(13):
-            tickers.append(new[fibon[i]])
-    new2=random.sample(tickers,30)
-    return new2
-
-
-tickers=random_fibonaci()
-
-start = '2021-11-20'
-end = '2021-12-20'
-
-def tarih(start=start,end=end):
-    start1=start
-    end1=end
-    return start1,end1   
+            new=random.sample(hisseKodları,348)
+            fibon=[0,1,2,3,5,8,13,21,34,55,89,144,233]
+            for i in range(13):
+                tickers.append(new[fibon[i]])
+        new2=random.sample(tickers,30)
+        return new2
 
 
-# tickers = ['ACSEL.IS', 'ADEL.IS', 'ADESE.IS', 'AEFES.IS']
+    tickers=random_fibonaci()
 
 
 
+    # def tarih(start=start,end=end):
+    #     start1=start
+    #     end1=end
+    #     return start1,end1   
 
-# Hisse senetleri verilerini indir
-portfolio_data = yf.download(tickers, start=tarih()[0], end=tarih()[1])
 
-# portfolio_data.iloc[i] * pd.Series([100, 100, 100, 100])
-sayı=len(tickers[0])
+    # tickers = ['ACSEL.IS', 'ADEL.IS', 'ADESE.IS', 'AEFES.IS']
 
-# Portföyün her gün için performansını hesapla
-for i in range(portfolio_data.shape[0]):
-    date = portfolio_data.index[i]
-    initial_value = (portfolio_data.iloc[0].reset_index(drop=True) * pd.Series([100]*sayı)).sum()
-    final_value = (portfolio_data.iloc[i].reset_index(drop=True) * pd.Series([100]*sayı)).sum()
 
-    profit_loss = final_value - initial_value
-    performance = (final_value - initial_value) / initial_value * 100
-    # print(f'{date}: Performans: {performance:.2f}%, Kar/Zarar: {profit_loss:.2f}')
+    start1=start[-1]
+    end1=end[-1]
+    # Hisse senetleri verilerini indir
+    portfolio_data = yf.download(tickers, start1, end1)
 
-            
-date1=0
+    # portfolio_data.iloc[i] * pd.Series([100, 100, 100, 100])
+    sayı=len(tickers[0])
 
-initial_value = (portfolio_data.iloc[0].reset_index(drop=True) * pd.Series([100]*sayı)).sum()
-target_value = initial_value + (initial_value * 0.15)
-for i in range(portfolio_data.shape[0]):
-    date = portfolio_data.index[i]
-    final_value = (portfolio_data.iloc[i].reset_index(drop=True) * pd.Series([100]*sayı)).sum()
-    if final_value >= target_value:
+    # Portföyün her gün için performansını hesapla
+    for i in range(portfolio_data.shape[0]):
+        date = portfolio_data.index[i]
+        initial_value = (portfolio_data.iloc[0].reset_index(drop=True) * pd.Series([100]*sayı)).sum()
+        final_value = (portfolio_data.iloc[i].reset_index(drop=True) * pd.Series([100]*sayı)).sum()
+
+        profit_loss = final_value - initial_value
         performance = (final_value - initial_value) / initial_value * 100
-        
-        
-        x=(f'Portföy {performance:.2f}% kar etti: {date}')
-        print(x)
-        date1= date.to_pydatetime().date()  
-        break
+        # print(f'{date}: Performans: {performance:.2f}%, Kar/Zarar: {profit_loss:.2f}')
 
+                
+    date1=0
 
+    initial_value = (portfolio_data.iloc[0].reset_index(drop=True) * pd.Series([100]*sayı)).sum()
+    target_value = initial_value + (initial_value * 0.15)
+    for i in range(portfolio_data.shape[0]):
+        date = portfolio_data.index[i]
+        final_value = (portfolio_data.iloc[i].reset_index(drop=True) * pd.Series([100]*sayı)).sum()
+        if final_value >= target_value:
+            performance = (final_value - initial_value) / initial_value * 100
+            
+            
+            x=(f'Portföy {performance:.2f}% kar etti: {date}')
+            print(x)
+            date1= date.to_pydatetime().date()
+            n=date1.strftime("%Y-%m-%d")
+            sson=start.append(n) 
+            date = pd.to_datetime(n)
+
+            three_months_later = date + pd.Timedelta(days=365)
+            send=end.append(three_months_later.strftime("%Y-%m-%d"))
+            
+            s=kazanç.append(performance)            
+            break
+    # x=new_start.append(n)
+print(start[0],start[-1])
+print(kazanç,len(kazanç))
 # def run():
 #     # Fonksiyon içeriği
 #     date2=date1
